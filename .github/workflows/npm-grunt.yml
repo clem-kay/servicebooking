@@ -22,8 +22,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Set up env
+      run: cd backend
+
     - name: Build
       run: |
-        cd backend
         npm install
         grunt
