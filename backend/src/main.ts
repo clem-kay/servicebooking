@@ -6,9 +6,9 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api/v1')
+  app.setGlobalPrefix('api/v1');
 
- // setup swagger
+  // setup swagger
   const config = new DocumentBuilder()
     .setTitle('Service booking  API')
     .setDescription('API documentation for Service booking app')

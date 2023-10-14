@@ -17,6 +17,7 @@ logs
 # Tests
 /backend/coverage
 /backend/.nyc_output
+/backend/.env
 
 # IDEs and editors
 /backend/.idea
@@ -26,6 +27,7 @@ logs
 /backend/*.launch
 /backend/.settings/
 /backend/*.sublime-workspace
+/backend/.env
 
 # IDE - VSCode
 .vscode/*
