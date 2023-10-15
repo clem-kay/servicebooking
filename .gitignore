@@ -28,6 +28,7 @@ logs
 /backend/.settings/
 /backend/*.sublime-workspace
 /backend/.env
+/backend/primsa/migrations
 
 # IDE - VSCode
 .vscode/*

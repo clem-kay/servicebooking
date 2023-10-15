@@ -18,7 +18,35 @@ model UserAccount {
   hashedRT  String?
   password  String
   role      String
-  isActive  Boolean @default(true)
+  isActive  Boolean  @default(true)
+  events    Event[]
 
   @@map("UserAccount")
+}
+
+model Event {
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  createdBy     UserAccount? @relation(fields: [userAccountId], references: [id])
+  userAccountId Int?
+  name          String       @unique
+  date          String
+  time          String
+  venue         String
+  description   String       @db.Text
+  eventImageURL String
+  tickets       Ticket[]
+
+  @@map("Events")
+}
+
+model Ticket {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  price     Float
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   Int
 }

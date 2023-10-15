@@ -8,6 +8,10 @@ import { UserAccountModule } from './user-account/user-account.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { EventService } from './event/event.service';
+import { EventController } from './event/event.controller';
+import { EventModule } from './event/event.module';
+import { TicketModule } from './ticket/ticket.module';
 
 @Module({
   imports: [
@@ -16,9 +20,11 @@ import { PrismaModule } from './prisma/prisma.module';
     }),
     UserAccountModule,
     AuthModule,
-    PrismaModule
+    PrismaModule,
+    EventModule,
+    TicketModule
   ],
-  controllers: [AppController],
-  providers: [AppService, PrismaService],
+  controllers: [AppController, EventController],
+  providers: [AppService, PrismaService, EventService],
 })
 export class AppModule {}
