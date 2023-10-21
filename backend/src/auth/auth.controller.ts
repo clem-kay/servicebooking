@@ -1,7 +1,9 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiForbiddenResponse, ApiOkResponse, ApiTags, ApiUnprocessableEntityResponse } from '@nestjs/swagger';
 import { LoginDto } from './dto/LoginDto';
+import { AuthGuard } from '@nestjs/passport';
+// import { Request } from 'express';
 
 
 @ApiTags('Auth')
@@ -16,6 +18,17 @@ export class AuthController {
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   async login(@Body() loginDto:LoginDto){
-    return await this.authService.login(loginDto)
+    const respose =  await this.authService.login(loginDto)
+    return {
+      message: 'Logged in successfully',
+      data: respose
+    };
   }
+  // @UseGuards(AuthGuard('jwt-refresh'))
+  // @Post('/refresh')
+  // refreshTokens(@Req() req: Request) {
+  //   const user = req.user
+  
+  //   return this.authService.refreshTokens(user['sub'],user['refreshToken']);
+  // }
 }

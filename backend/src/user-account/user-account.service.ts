@@ -1,4 +1,4 @@
-import { Injectable, Inject, Logger } from '@nestjs/common';
+import { Injectable, Inject, Logger, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { hashPassword } from 'src/core/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -6,8 +6,16 @@ import { UserAccountDTO } from './dto/user-account.dto';
 
 @Injectable()
 export class UserAccountService {
+  
+ 
   private readonly logger = new Logger(UserAccountService.name);
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  
+  async findOneById(id: number) {
+    return await this.prisma.userAccount.findUnique({
+      where: { id },
+    });
+  }
 
   async create(userAccount: UserAccountDTO) {
     return await this.prisma.userAccount.create({
@@ -29,6 +37,7 @@ export class UserAccountService {
       select: { username: true, role: true,isActive:true },
     });
   }
+
 
   // async update(id: number, data: any) {
   //   const [numberOfAffectedRows, [updatedUser]] =

@@ -3,7 +3,7 @@ import { LoginDto } from './dto/LoginDto';
 import * as bcrypt from 'bcrypt';
 import { UserAccountService } from 'src/user-account/user-account.service';
 import { JwtService } from '@nestjs/jwt';
-import { Tokens,SignIn } from 'src/types';
+import { Tokens, SignIn } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -12,9 +12,21 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(loginDTO: LoginDto):Promise<SignIn> {
+  async refreshTokens(userId: number, rt: string) {
+    const user = await this.userAccountService.findOneById(userId);
+    if (!user) throw new ForbiddenException('Access Denied');
+
+    const rtMatches = bcrypt.compare(rt, user.hashedRT);
+    if (!rtMatches) throw new ForbiddenException('Access Denied');
+
+    const tokens = await this.getTokens(user.id, user.username);
+    await this.userAccountService.updateRTHash(user.id, tokens.refresh_token);
+    return tokens;
+  }
+
+  async login(loginDTO: LoginDto): Promise<SignIn> {
     const userAccount = await this.userAccountService.findOneByUsername(
-      loginDTO.username.toLowerCase()
+      loginDTO.username.toLowerCase(),
     );
     if (!userAccount) throw new ForbiddenException('Access Denied');
     const passwordMatches = await bcrypt.compare(
@@ -28,7 +40,7 @@ export class AuthService {
       userAccount.id,
       tokens.refresh_token,
     );
-    return {...tokens, username:userAccount.username};
+    return { ...tokens, username: userAccount.username };
   }
 
   async getTokens(userId: number, username: string): Promise<Tokens> {
