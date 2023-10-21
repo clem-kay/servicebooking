@@ -25,4 +25,6 @@ jobs:
     - name: Build
       run: |
         cd backend && npm install
+        npm install grunt --save-dev
+        npm install grunt-contrib-sass --save-dev
         grunt
